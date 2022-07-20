@@ -13,6 +13,18 @@ function escapeHtml(unsafe) {
     .replaceAll("'", '&#039;');
 }
 
+const cfg = {
+  githubUser: 'donbrae',
+  hideIds: [
+    // IDs of Gists to exclude from page
+    '2369abb83a0f3d53fbc3aba963e80f7c', // PDF page numbers
+    'bfbda44e3bb5c2883a25acc5a759c8fc', // Bootstrap 5 colour gradient
+    'ab4e15be962602b1bf4975b912b14939' // Apple Music shortcuts
+  ],
+  perPage: 15, // Number of gists to fetch from API
+  gistsLimit: 10 // Maximum number of gists to add to page
+};
+
 const months = [
   'Jan',
   'Feb',
@@ -33,7 +45,9 @@ const gists = document.getElementById('gists');
 document.getElementById('get-gists').addEventListener('click', getGists);
 
 function getGists() {
-  fetch('https://api.github.com/users/donbrae/gists?per_page=15')
+  fetch(
+    `https://api.github.com/users/${cfg.githubUser}/gists?per_page=${cfg.perPage}`
+  )
     .then(function (response) {
       if (response.ok) return response.json();
 
@@ -42,22 +56,14 @@ function getGists() {
     .then(function (data) {
       console.log(data);
 
-      const gistsLimit = 10; // Maximum number of Gists to add to UI
-      const hideIds = [
-        // IDs of Gists to exclude
-        '2369abb83a0f3d53fbc3aba963e80f7c', // PDF page numbers
-        'bfbda44e3bb5c2883a25acc5a759c8fc', // Bootstrap 5 colour gradient
-        'ab4e15be962602b1bf4975b912b14939' // Apple Music shortcuts
-      ];
-
       // Format each Gists and add to `items`
       function addToUI() {
         const items = [];
         const dataFiltered = data.filter(
-          (gist) => hideIds.indexOf(gist.id) === -1
+          (gist) => cfg.hideIds.indexOf(gist.id) === -1
         );
 
-        for (let i = 0; i < gistsLimit; i++) {
+        for (let i = 0; i < cfg.gistsLimit; i++) {
           if (dataFiltered[i]) {
             const date = new Date(dataFiltered[i].created_at);
             const dateFormatted = `${date.getDate()} ${
