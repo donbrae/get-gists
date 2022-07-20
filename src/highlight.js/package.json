@@ -1,0 +1,11 @@
+{
+  "name": "highlight.js",
+  "version": "11.5.0",
+  "description": "Custom build of highlight.js",
+  "main": "highlight.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
