@@ -101,3 +101,7 @@ button.get-gist {
 .gist-content ul:last-child {
   margin-bottom: 0;
 }
+
+.gist-content ul li ul {
+  margin-top: 0
+}
