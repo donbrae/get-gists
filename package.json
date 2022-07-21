@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.18.9",
+    "punycode": "^2.1.1",
     "typescript": "4.7.4"
   },
   "resolutions": {
