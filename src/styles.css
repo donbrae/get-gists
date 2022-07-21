@@ -29,12 +29,23 @@ code {
     Liberation Mono, monospace;
 }
 
+button.get-gist {
+  margin-top: 14px;
+}
+
+.hide {
+  display: none;
+}
+
+.dt-published {
+  font-size: 15px;
+  margin-left: 2px;
+}
+
 .gist-content {
   max-width: 100%;
   overflow: auto;
   font-size: 0.8em;
-  border-radius: 6px;
-
   box-shadow: 0 1.1px 1.9px -18px rgba(0, 0, 0, 0.02),
     0 2.8px 4.9px -18px rgba(0, 0, 0, 0.03),
     0 5.7px 9.9px -18px rgba(0, 0, 0, 0.038),
@@ -42,8 +53,51 @@ code {
     0 32px 56px -18px rgba(0, 0, 0, 0.07);
 }
 
+.gist-container {
+  background-color: #f1f1f1;
+  border-radius: 13px;
+  padding: .8em 1em;
+}
+
+.gist-container {
+  margin-bottom: 1em;
+}
+
+.gist-container h2 {
+  margin: 0 0 .1em 0;
+  display: inline-block;
+  font-size: 25px;
+}
+
+.gist-content {
+  background-color: #fff;
+  border-radius: 8px;
+  margin-top: 13px;
+}
+
+.gist-content h2 {
+  font-size: 20px;
+}
+
 .gist-content pre,
 .gist-content div {
   padding: 1.25em 1em;
-  margin: 1.25em 0 0;
+  margin: 0;
+}
+
+.gist-content ul {
+  padding-left: 25px;
+}
+
+.gist-content ul {
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.gist-content ul:first-child {
+  margin-top: 0;
+}
+
+.gist-content ul:last-child {
+  margin-bottom: 0;
 }

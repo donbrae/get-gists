@@ -87,16 +87,16 @@ function getGists() {
             });
 
             items.push(
-              `<div>
+              `<div class="gist-container">
                 <a href="${
                   dataFiltered[i].html_url
-                }"><h3 class="h5 display-inline">${
+                }"><h2>${
                 Object.keys(dataFiltered[i].files)[0]
-              }</h3></a> <span class="dt-published post-meta date-nudge">${verb}${dateFormatted} ${year}</span>${description}
+              }</h2></a> <span class="dt-published">${verb}${dateFormatted} ${year}</span>${description}
                 <button class="get-gist display-block button button-sm mt-1" data-gist-id="${
                   dataFiltered[i].id
                 }">Show</button>
-                <div id="gist-${dataFiltered[i].id}" class="gist-content"></div>
+                <div id="gist-${dataFiltered[i].id}" class="gist-content hide"></div>
               </div>`
             );
           } else break;
