@@ -56,6 +56,11 @@ function getGists() {
     .then(function (data) {
       console.log(data);
 
+      if (data.error) {
+        console.error(data.error);
+        return;
+      }
+
       // Format each Gists and add to `items`
       function addToUI() {
         const items = [];
@@ -120,6 +125,18 @@ function getGists() {
                 return Promise.reject(response);
               })
               .then(function (data) {
+
+                if (data.error) {
+                  console.error(data.error);
+                  el.innerHTML = `<div class="gist-content">${escapeHtml(data.error)}</div>`;
+                  el.classList.remove('hide');
+                  btn.parentNode.removeChild(btn);
+                  setTimeout(() => {
+                    el.classList.add('show');
+                  }, 20);
+                  return;
+                }
+
                 const gistName = Object.keys(data.files)[0];
                 const gist = data.files[gistName];
                 let gistContent;
