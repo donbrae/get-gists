@@ -13,6 +13,14 @@ function escapeHtml(unsafe) {
     .replaceAll("'", '&#039;');
 }
 
+function show(el) {
+  el.classList.remove('hide');
+  setTimeout(() => {
+    el.classList.add('show');
+  }, 30);
+}
+
+
 const cfg = {
   githubUser: 'donbrae',
   hideIds: [
@@ -44,7 +52,10 @@ const gists = document.getElementById('gists');
 
 document.getElementById('get-gists').addEventListener('click', getGists);
 
-function getGists() {
+function getGists(e) {
+  const btnGetGists = e.target;
+  btnGetGists.classList.add('fade');
+
   fetch(
     `https://api.github.com/users/${cfg.githubUser}/gists?per_page=${cfg.perPage}`
   )
@@ -93,21 +104,23 @@ function getGists() {
 
             items.push(
               `<div class="gist-container">
-                <a href="${
+                <h2><a href="${
                   dataFiltered[i].html_url
-                }"><h2>${
+                }">${
                 Object.keys(dataFiltered[i].files)[0]
-              }</h2></a> <span class="dt-published">${verb}${dateFormatted} ${year}</span>${description}
+              }</a></h2> <span class="dt-published">${verb}${dateFormatted} ${year}</span>${description}
                 <button class="get-gist display-block button button-sm mt-1" data-gist-id="${
                   dataFiltered[i].id
                 }">Show</button>
-                <div id="gist-${dataFiltered[i].id}" class="gist-content hide"></div>
+                <div id="gist-${dataFiltered[i].id}" class="gist-content hide fade"></div>
               </div>`
             );
           } else break;
         }
 
         gists.innerHTML = items.join('');
+        btnGetGists.parentNode.removeChild(btnGetGists);
+        show(gists);
 
         const getGists = document.querySelectorAll('.get-gist');
         getGists.forEach((getGistButton) => {
@@ -115,6 +128,7 @@ function getGists() {
             const gistId = e.target.dataset.gistId;
             const btn = e.target;
             btn.disabled = true; // Make sure only one API call is sent
+            btn.classList.add('fade');
 
             const el = document.getElementById(`gist-${gistId}`);
 
@@ -129,11 +143,8 @@ function getGists() {
                 if (data.error) {
                   console.error(data.error);
                   el.innerHTML = `<div class="gist-content">${escapeHtml(data.error)}</div>`;
-                  el.classList.remove('hide');
                   btn.parentNode.removeChild(btn);
-                  setTimeout(() => {
-                    el.classList.add('show');
-                  }, 20);
+                  show(el);
                   return;
                 }
 
@@ -164,12 +175,13 @@ function getGists() {
                   );
                 }
 
-                el.classList.remove('hide');
                 btn.parentNode.removeChild(btn);
+                show(el);
               })
               .catch(function (err) {
                 console.error(err);
                 el.innerText = `${err.status} ${err.statusText}: ${err.url}`;
+                show(el);
               });
           });
         });
@@ -180,5 +192,6 @@ function getGists() {
     .catch(function (err) {
       console.error(err);
       gists.innerText = `${err.status} ${err.statusText}: ${err.url}`;
+      show(gists);
     });
 }

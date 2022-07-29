@@ -1,6 +1,6 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   max-width: 800px;
   line-height: 1.6;
   font-size: 18px;
@@ -17,10 +17,35 @@ h3 {
 
 a {
   color: #0068d6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
 }
 
 a:visited {
   color: #8b8b8b;
+}
+
+button {
+  border: 0;
+  background: #1e8cff;
+  color: #fff;
+  padding: 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background: #0078f5;
+}
+
+button:focus,
+button:active {
+  background: #006ad9;
 }
 
 pre,
@@ -33,13 +58,23 @@ button.get-gist {
   margin-top: 14px;
 }
 
+.fade {
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.fade.show {
+  opacity: 1;
+}
+
 .hide {
   display: none;
 }
 
 .dt-published {
-  font-size: 15px;
+  font-size: 14px;
   margin-left: 2px;
+  color: #595959;
 }
 
 .gist-content {
@@ -54,9 +89,9 @@ button.get-gist {
 }
 
 .gist-container {
-  background-color: #f1f1f1;
+  background-color: #f3f3f3;
   border-radius: 13px;
-  padding: .8em 1em;
+  padding: 0.8em 1em;
 }
 
 .gist-container {
@@ -64,7 +99,7 @@ button.get-gist {
 }
 
 .gist-container h2 {
-  margin: 0 0 .1em 0;
+  margin: 0 0 0.1em 0;
   display: inline-block;
   font-size: 25px;
 }
@@ -103,5 +138,5 @@ button.get-gist {
 }
 
 .gist-content ul li ul {
-  margin-top: 0
+  margin-top: 0;
 }
