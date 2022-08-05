@@ -73,121 +73,117 @@ function getGists(e) {
       }
 
       // Format each Gists and add to `items`
-      function addToUI() {
-        const items = [];
-        const dataFiltered = data.filter(
-          (gist) => cfg.hideIds.indexOf(gist.id) === -1
-        );
+      const items = [];
+      const dataFiltered = data.filter(
+        (gist) => cfg.hideIds.indexOf(gist.id) === -1
+      );
 
-        for (let i = 0; i < cfg.gistsLimit; i++) {
-          if (dataFiltered[i]) {
-            const date = new Date(dataFiltered[i].created_at);
-            const dateFormatted = `${date.getDate()} ${
-              months[date.getMonth()]
-            }`;
-            const verb = !i ? 'Created ' : '';
-            const year = ` ’${date.getFullYear().toString().slice(-2)}`;
+      for (let i = 0; i < cfg.gistsLimit; i++) {
+        if (dataFiltered[i]) {
+          const date = new Date(dataFiltered[i].created_at);
+          const dateFormatted = `${date.getDate()} ${
+            months[date.getMonth()]
+          }`;
+          const verb = !i ? 'Created ' : '';
+          const year = ` ’${date.getFullYear().toString().slice(-2)}`;
 
-            let description = dataFiltered[i].description.trim().length
-              ? `<div>${dataFiltered[i].description}</div>`
-              : '';
+          let description = dataFiltered[i].description.trim().length
+            ? `<div>${dataFiltered[i].description}</div>`
+            : '';
 
-            // Transform links
-            description = description.replace(urlRegEx, function (match) {
-              return `<a href="${match}">${match}</a>`;
-            });
-
-            // Transform `` into <code></code>
-            description = description.replaceAll(/`(.+?)`/gi, function (match) {
-              return `<code>${match.slice(1).slice(0, -1)}</code>`;
-            });
-
-            items.push(
-              `<div class="gist-container">
-                <h2><a href="${
-                  dataFiltered[i].html_url
-                }">${
-                Object.keys(dataFiltered[i].files)[0]
-              }</a></h2> <span class="dt-published">${verb}${dateFormatted} ${year}</span>${description}
-                <button class="get-gist display-block button button-sm mt-1" data-gist-id="${
-                  dataFiltered[i].id
-                }">Show</button>
-                <div id="gist-${dataFiltered[i].id}" class="gist-content hide fade"></div>
-              </div>`
-            );
-          } else break;
-        }
-
-        gists.innerHTML = items.join('');
-        btnGetGists.parentNode.removeChild(btnGetGists);
-        show(gists);
-
-        const getGists = document.querySelectorAll('.get-gist');
-        getGists.forEach((getGistButton) => {
-          getGistButton.addEventListener('click', (e) => {
-            const gistId = e.target.dataset.gistId;
-            const btn = e.target;
-            btn.disabled = true; // Make sure only one API call is sent
-            btn.classList.add('fade');
-
-            const el = document.getElementById(`gist-${gistId}`);
-
-            fetch(`https://api.github.com/gists/${gistId}`)
-              .then(function (response) {
-                if (response.ok) return response.json();
-
-                return Promise.reject(response);
-              })
-              .then(function (data) {
-
-                if (data.error) {
-                  console.error(data.error);
-                  el.innerHTML = `<div class="gist-content">${escapeHtml(data.error)}</div>`;
-                  btn.parentNode.removeChild(btn);
-                  show(el);
-                  return;
-                }
-
-                const gistName = Object.keys(data.files)[0];
-                const gist = data.files[gistName];
-                let gistContent;
-
-                if (gist.type === 'text/html') {
-                  gistContent = escapeHtml(gist.content);
-                } else if (gist.type === 'text/markdown') {
-                  const md = new markdownit('default', { html: true });
-                  gistContent = md.render(gist.content);
-                } else {
-                  gistContent = gist.content;
-                }
-
-                if (gist.type !== 'text/markdown') {
-                  el.insertAdjacentHTML(
-                    'beforeend',
-                    `<pre class="code" role="code">${gistContent}</pre>`
-                  );
-                  hljs.highlightElement(el.querySelector('pre'));
-                } else {
-                  // Markdown
-                  el.insertAdjacentHTML(
-                    'beforeend',
-                    `<div>${gistContent}</div>`
-                  );
-                }
-
-                btn.parentNode.removeChild(btn);
-                show(el);
-              })
-              .catch(function (err) {
-                console.error(err);
-                el.innerText = `${err.status} ${err.statusText}: ${err.url}`;
-                show(el);
-              });
+          // Transform links
+          description = description.replace(urlRegEx, function (match) {
+            return `<a href="${match}">${match}</a>`;
           });
-        });
+
+          // Transform `` into <code></code>
+          description = description.replaceAll(/`(.+?)`/gi, function (match) {
+            return `<code>${match.slice(1).slice(0, -1)}</code>`;
+          });
+
+          items.push(
+            `<div class="gist-container">
+              <h2><a href="${
+                dataFiltered[i].html_url
+              }">${
+              Object.keys(dataFiltered[i].files)[0]
+            }</a></h2> <span class="dt-published">${verb}${dateFormatted} ${year}</span>${description}
+              <button class="get-gist display-block button button-sm mt-1" data-gist-id="${
+                dataFiltered[i].id
+              }">Show</button>
+              <div id="gist-${dataFiltered[i].id}" class="gist-content hide fade"></div>
+            </div>`
+          );
+        } else break;
       }
 
-      addToUI();
+      gists.innerHTML = items.join('');
+      btnGetGists.parentNode.removeChild(btnGetGists);
+      show(gists);
+
+      const getGists = document.querySelectorAll('.get-gist');
+      getGists.forEach((getGistButton) => {
+        getGistButton.addEventListener('click', (e) => {
+          const gistId = e.target.dataset.gistId;
+          const btn = e.target;
+          btn.disabled = true; // Make sure only one API call is sent
+          btn.classList.add('fade');
+
+          const el = document.getElementById(`gist-${gistId}`);
+
+          fetch(`https://api.github.com/gists/${gistId}`)
+            .then(function (response) {
+              if (response.ok) return response.json();
+
+              return Promise.reject(response);
+            })
+            .then(function (data) {
+
+              if (data.error) {
+                console.error(data.error);
+                el.innerHTML = `<div class="gist-content">${escapeHtml(data.error)}</div>`;
+                btn.parentNode.removeChild(btn);
+                show(el);
+                return;
+              }
+
+              const gistName = Object.keys(data.files)[0];
+              const gist = data.files[gistName];
+              let gistContent;
+
+              if (gist.type === 'text/html') {
+                gistContent = escapeHtml(gist.content);
+              } else if (gist.type === 'text/markdown') {
+                const md = new markdownit('default', { html: true });
+                gistContent = md.render(gist.content);
+              } else {
+                gistContent = gist.content;
+              }
+
+              if (gist.type !== 'text/markdown') {
+                el.insertAdjacentHTML(
+                  'beforeend',
+                  `<pre class="code" role="code">${gistContent}</pre>`
+                );
+                hljs.highlightElement(el.querySelector('pre'));
+              } else {
+                // Markdown
+                el.insertAdjacentHTML(
+                  'beforeend',
+                  `<div>${gistContent}</div>`
+                );
+              }
+
+              btn.parentNode.removeChild(btn);
+              show(el);
+            })
+            .catch(function (err) {
+              console.error(err);
+              el.innerText = `${err.status} ${err.statusText}: ${err.url}`;
+              show(el);
+            });
+        });
+      });
     })
     .catch(function (err) {
       console.error(err);
