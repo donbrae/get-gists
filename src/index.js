@@ -24,7 +24,7 @@ function show(el) {
 const cfg = {
   githubUser: 'donbrae',
   hideIds: [
-    // IDs of Gists to exclude from page
+    // IDs of gists to exclude from page
     '2369abb83a0f3d53fbc3aba963e80f7c', // PDF page numbers
     'bfbda44e3bb5c2883a25acc5a759c8fc', // Bootstrap 5 colour gradient
     'ab4e15be962602b1bf4975b912b14939' // Apple Music shortcuts
@@ -72,7 +72,7 @@ function getGists(e) {
         return;
       }
 
-      // Format each Gists and add to `items`
+      // Format each gist and add to `items`
       const items = [];
       const dataFiltered = data.filter(
         (gist) => cfg.hideIds.indexOf(gist.id) === -1
@@ -160,18 +160,17 @@ function getGists(e) {
                 gistContent = gist.content;
               }
 
-              if (gist.type !== 'text/markdown') {
+              if (gist.type === 'text/markdown') { // Markdown
+                el.insertAdjacentHTML(
+                  'beforeend',
+                  `<div>${gistContent}</div>`
+                );
+              } else { // Code or plain text
                 el.insertAdjacentHTML(
                   'beforeend',
                   `<pre class="code" role="code">${gistContent}</pre>`
                 );
                 hljs.highlightElement(el.querySelector('pre'));
-              } else {
-                // Markdown
-                el.insertAdjacentHTML(
-                  'beforeend',
-                  `<div>${gistContent}</div>`
-                );
               }
 
               btn.parentNode.removeChild(btn);
