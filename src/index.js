@@ -56,6 +56,16 @@ function getGists(e) {
   const btnGetGists = e.target;
   btnGetGists.classList.add('fade');
 
+  function error(err, container, e) {
+    console.error(err);
+    const escapedHTML = escapeHtml(`${err.status} ${err.statusText}: ${err.url}`);
+    container.innerHTML = `<div>${err.status} ${err.statusText}: ${err.url}</div>`;
+    show(container);
+
+    const button = e.target;
+    button.parentNode.removeChild(button);
+  }
+
   fetch(
     `https://api.github.com/users/${cfg.githubUser}/gists?per_page=${cfg.perPage}`
   )
@@ -176,17 +186,13 @@ function getGists(e) {
               btn.parentNode.removeChild(btn);
               show(el);
             })
-            .catch(function (err) {
-              console.error(err);
-              el.innerText = `${err.status} ${err.statusText}: ${err.url}`;
-              show(el);
+            .catch((err) => {
+              error(err, el, e);
             });
         });
       });
     })
-    .catch(function (err) {
-      console.error(err);
-      gists.innerText = `${err.status} ${err.statusText}: ${err.url}`;
-      show(gists);
+    .catch((err) => {
+      error(err, gists, e);
     });
 }
